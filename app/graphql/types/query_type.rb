@@ -36,5 +36,22 @@ module Types
     def authors
       Author.all
     end
+
+    # login query
+    # String is a session key
+    field :login, String, null: true, description: "Login a user" do
+      argument :email, String, required: true
+      argument :password, String, required: true
+    end
+
+    # this method will try to authenticate the user
+    def login(email:, password:)
+      # authenticate(unencrypted_password)
+      # Returns self if the password is correct, otherwise false.
+      if user = User.where(email: email).first&.authenticate(password)
+        # if a user exists get a created key
+        user.sessions.create.key
+      end
+    end
   end
 end
