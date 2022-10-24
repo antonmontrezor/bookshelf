@@ -34,6 +34,12 @@ class Types::AuthorType < Types::BaseObject
   def errors
     object.errors.map { |e| { field_name: e.attribute, errors: object.errors[e.attribute]} }
   end
+
+  # this is the concept of authorization (https://graphql-ruby.org/authorization/authorization.html)
+  # to be able to retrieve only an author which passed away
+  def self.authorized?(object, context)
+    !object.is_alive?
+  end
 end
 
 class Types::AuthorInputType < GraphQL::Schema::InputObject
