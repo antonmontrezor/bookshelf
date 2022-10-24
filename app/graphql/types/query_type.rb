@@ -39,7 +39,7 @@ module Types
 
     # login query
     # String is a session key
-    field :login, String, null: true, description: "Login a user" do
+    field :login, String, null: true, description: "Log in a user" do
       argument :email, String, required: true
       argument :password, String, required: true
     end
@@ -58,6 +58,13 @@ module Types
 
     def current_user
       context[:current_user]
+    end
+
+    field :logout, Boolean, null: false, description: "Log out a user"
+
+    def logout
+      # Session.where(id: context[:session_id]).destroy_all
+      Session.destroy(context[:session_id])
     end
   end
 end

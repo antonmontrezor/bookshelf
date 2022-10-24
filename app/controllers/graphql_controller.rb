@@ -15,7 +15,9 @@ class GraphqlController < ApplicationController
 
     context = {
       # this object will be accessible during executing if passed to the schema execute method like the one below
-      current_user: session&.user
+      current_user: session&.user,
+      # storing a session id so we can find that session and delete it to log a user out
+      session_id: session&.id
     }
     result = BookshelfSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result
